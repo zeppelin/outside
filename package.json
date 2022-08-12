@@ -1,0 +1,59 @@
+{
+  "name": "@zeppelin/outside",
+  "version": "0.0.0",
+  "description": "Listen to events outside of a DOM element",
+  "license": "MIT",
+  "type": "module",
+  "author": "Gabor Babicz <gabor@gaborbabicz.com>",
+  "keywords": [
+    "DOM",
+    "Event",
+    "click",
+    "outside"
+  ],
+  "main": "./dist/outside.umd.js",
+  "module": "./dist/outside.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/outside.es.js",
+      "require": "./dist/outside.umd.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
+    "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
+    "lint:js": "eslint . --ext .js,.cjs,.mjs,.ts --cache",
+    "lint:js:fix": "eslint . --ext .js,.cjs,.mjs,.ts --fix",
+    "release": "release-it",
+    "test": "vitest",
+    "test:ci": "vitest --run",
+    "test:ui": "vitest --ui"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.1",
+    "@typescript-eslint/eslint-plugin": "^5.33.0",
+    "@typescript-eslint/parser": "^5.33.0",
+    "@vitest/ui": "^0.21.1",
+    "eslint": "^7.32.0 || ^8.2.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-ember": "^11.0.5",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-vitest": "^0.0.8",
+    "hyperhtml": "^2.34.1",
+    "jsdom": "^20.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.1",
+    "release-it": "^15.3.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.0.4",
+    "vitest": "^0.21.1"
+  }
+}
