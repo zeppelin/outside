@@ -1,6 +1,6 @@
 {
   "name": "@zeppelin/outside",
-  "version": "0.0.1-alpha.3",
+  "version": "0.0.1-alpha.4",
   "description": "Listen to events outside of a DOM element",
   "license": "MIT",
   "type": "module",
