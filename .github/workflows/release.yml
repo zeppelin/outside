@@ -7,11 +7,13 @@ on:
 
 jobs:
   release:
-    name: release
+    name: "Release"
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Install Node
       - uses: actions/setup-node@v2
         with:
           node-version: 14
@@ -37,11 +39,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - run: pnpm build
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
 
       - name: auto-dist-tag
         run: npx auto-dist-tag@1 --write
 
-      - run: npm publish
+      - name: Publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
