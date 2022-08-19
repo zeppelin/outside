@@ -1,6 +1,11 @@
 /* eslint-env node */
 
 module.exports = {
+  plugins: {
+    '@release-it-plugins/lerna-changelog': {
+      infile: 'CHANGELOG.md',
+    },
+  },
   git: {
     commitMessage: 'Release v${version}',
     tagName: 'v${version}',
