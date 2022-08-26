@@ -219,5 +219,35 @@ describe('Outside', () => {
 
       expect(callback).toHaveBeenCalledTimes(1);
     });
+
+    it('capture: default', () =>
+      new Promise((done) => {
+        render(defaultTemplate);
+
+        let callback = (e: Event) => {
+          expect(e.eventPhase).toBe(e.BUBBLING_PHASE);
+          done(true);
+        };
+
+        outside = new ClickOutside(q('.inside'), callback);
+
+        triggerEvent('.outside', 'pointerup');
+      }));
+
+    it('capture: true', () =>
+      new Promise((done) => {
+        render(defaultTemplate);
+
+        let callback = (e: Event) => {
+          expect(e.eventPhase).toBe(e.CAPTURING_PHASE);
+          done(true);
+        };
+
+        outside = new ClickOutside(q('.inside'), callback, {
+          capture: true,
+        });
+
+        triggerEvent('.outside', 'pointerup');
+      }));
   });
 });

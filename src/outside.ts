@@ -21,6 +21,7 @@ export class ClickOutside {
       activate?: boolean;
       passiveEventListeners?: boolean;
       eventTypes?: EventType[];
+      capture?: boolean;
     } = {}
   ) {
     let { activate, eventTypes, ...opts } = options;
@@ -40,6 +41,7 @@ export class ClickOutside {
   }
 
   private _isActive = true;
+  private capture = false;
   private eventTypes: EventType[];
   private passiveEventListeners = true;
   private pointerDownEventPath?: EventTarget[];
@@ -71,6 +73,7 @@ export class ClickOutside {
 
     for (let eventType of this.eventTypes) {
       document.addEventListener(eventType, this.upEventHandler, {
+        capture: this.capture,
         ...(this.passiveEventListeners && PASSIVE_EVENT_OPTIONS),
       });
     }
@@ -80,7 +83,13 @@ export class ClickOutside {
     document.removeEventListener(DOWN_LISTENER_NAME, this.downEventHandler);
 
     for (let eventType of this.eventTypes) {
-      document.removeEventListener(eventType, this.upEventHandler);
+      document.removeEventListener(eventType, this.upEventHandler, {
+        //  If a listener is registered twice, one with the capture flag set and
+        //  one without, you must remove each one separately. Removal of a
+        //  capturing listener does not affect a non-capturing version of the same
+        //  listener, and vice versa.
+        capture: this.capture,
+      });
     }
   }
 
