@@ -30,71 +30,75 @@ describe('Outside', () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('destroy', async () => {
-    render(defaultTemplate);
+  describe('Lifecycle', () => {
+    it('destroy', async () => {
+      render(defaultTemplate);
 
-    outside = new ClickOutside(q('.inside'), callback);
+      outside = new ClickOutside(q('.inside'), callback);
 
-    clickWithPointer('.outside');
+      clickWithPointer('.outside');
 
-    outside.destroy();
-
-    clickWithPointer('.outside');
-
-    expect(callback).toHaveBeenCalledTimes(1);
-  });
-
-  it('destroy called multiple times', async () => {
-    render(defaultTemplate);
-
-    outside = new ClickOutside(q('.inside'), callback);
-
-    expect(() => {
       outside.destroy();
-      outside.destroy();
-    }).not.toThrow();
-  });
 
-  it('options.exceptSelector', async () => {
-    render(hyper`
-      <div class="outside">🏞</div>
-      <div class="inside">🏠</div>
-      <div class="except-outside">❌</div>
-    `);
+      clickWithPointer('.outside');
 
-    outside = new ClickOutside(q('.inside'), callback, {
-      exceptSelector: '.except-outside',
+      expect(callback).toHaveBeenCalledTimes(1);
     });
 
-    clickWithPointer('.inside');
-    clickWithPointer('.except-outside');
-    clickWithPointer('.outside');
+    it('destroy called multiple times', async () => {
+      render(defaultTemplate);
 
-    expect(callback).toHaveBeenCalledTimes(1);
+      outside = new ClickOutside(q('.inside'), callback);
+
+      expect(() => {
+        outside.destroy();
+        outside.destroy();
+      }).not.toThrow();
+    });
   });
 
-  it('options.activate', async () => {
-    render(defaultTemplate);
+  describe('options', () => {
+    it('exceptSelector', async () => {
+      render(hyper`
+        <div class="outside">🏞</div>
+        <div class="inside">🏠</div>
+        <div class="except-outside">❌</div>
+      `);
 
-    outside = new ClickOutside(q('.inside'), callback, {
-      activate: false,
+      outside = new ClickOutside(q('.inside'), callback, {
+        exceptSelector: '.except-outside',
+      });
+
+      clickWithPointer('.inside');
+      clickWithPointer('.except-outside');
+      clickWithPointer('.outside');
+
+      expect(callback).toHaveBeenCalledTimes(1);
     });
 
-    expect(outside.isActive).toBe(false);
+    it('activate', async () => {
+      render(defaultTemplate);
 
-    clickWithPointer('.outside');
+      outside = new ClickOutside(q('.inside'), callback, {
+        activate: false,
+      });
 
-    outside.activate();
-    expect(outside.isActive).toBe(true);
+      expect(outside.isActive).toBe(false);
 
-    // Only this should fire, hence the callback should be called only once.
-    clickWithPointer('.outside');
+      clickWithPointer('.outside');
 
-    outside.deactivate();
-    expect(outside.isActive).toBe(false);
+      outside.activate();
+      expect(outside.isActive).toBe(true);
 
-    clickWithPointer('.outside');
+      // Only this should fire, hence the callback should be called only once.
+      clickWithPointer('.outside');
 
-    expect(callback).toHaveBeenCalledTimes(1);
+      outside.deactivate();
+      expect(outside.isActive).toBe(false);
+
+      clickWithPointer('.outside');
+
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
   });
 });
