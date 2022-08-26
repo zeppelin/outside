@@ -81,14 +81,17 @@ export class ClickOutside {
         return;
       }
 
-      let releasedElement = pointerUpEvent.target as HTMLElement;
-      let downEventPath = composedPath(this.pointerDownEvent!);
+      if (this.pointerDownEvent) {
+        let downEventPath = composedPath(this.pointerDownEvent);
 
-      // If the pointer was pressed inside the element, just return, because it
-      // doesn't matter if it was released outside.
-      if (downEventPath?.includes(element)) {
-        return;
+        // If the pointer was pressed inside the element, just return, because it
+        // doesn't matter if it was released outside.
+        if (downEventPath?.includes(element)) {
+          return;
+        }
       }
+
+      let releasedElement = pointerUpEvent.target as HTMLElement;
 
       // Return if `exceptSelector` is matching the element that was released.
       if (exceptSelector && closest(releasedElement, exceptSelector)) {

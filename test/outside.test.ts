@@ -3,7 +3,7 @@ import hyper from 'hyperhtml';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { ClickOutside } from '../src/index';
-import { clickWithPointer, q, render } from './test-helpers';
+import { clickWithPointer, q, render, triggerEvent } from './test-helpers';
 
 const defaultTemplate = hyper`
   <div class="outside">🏞</div>
@@ -79,6 +79,16 @@ describe('Outside', () => {
       outside = new ClickOutside(q('.inside'), callback as unknown as Function);
 
       clickWithPointer('.outside');
+
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+
+    it('without pointerdown event', async () => {
+      render(defaultTemplate);
+
+      outside = new ClickOutside(q('.inside'), callback);
+
+      triggerEvent('.outside', 'pointerup');
 
       expect(callback).toHaveBeenCalledTimes(1);
     });
