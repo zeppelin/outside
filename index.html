@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@zeppelin/outside</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="inside">🏠</div>
+      <div class="outside">🏞</div>
+      <div class="except-outside">❌</div>
+    </div>
+
+    <script type="module" src="./src/index.ts"></script>
+    <script type="module">
+      import { ClickOutside } from '/src/index.ts';
+
+      let callback = (e) => {
+        console.log(`%c🎉 ${e.target.className}`, 'font-size: x-large');
+      }
+
+      let outside = new ClickOutside(document.querySelector('.inside'), callback, {
+        exceptSelector: '.except-outside'
+      });
+    </script>
+
+    <style>
+      body {
+        margin: 0;
+      }
+
+      .wrapper {
+        height: 100vh;
+        font-size: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+      }
+
+      .wrapper > div {
+        width: 28vw;
+        height: 80vh;
+        background: cornsilk;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </body>
+</html>
