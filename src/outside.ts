@@ -2,7 +2,9 @@ import { closest, composedPath, documentOrBodyContains } from './utils';
 import arePassiveEventsSupported from './utils/supports-passive-events';
 
 // Somehow this needs to be told to ESLint.
-/* global EventListener */
+/* global EventListener, DocumentEventMap */
+
+type EventType = keyof DocumentEventMap;
 
 const PASSIVE_EVENTS_SUPPORTED = arePassiveEventsSupported();
 const PASSIVE_EVENT_OPTIONS = PASSIVE_EVENTS_SUPPORTED ? { passive: true } : {};
@@ -18,11 +20,14 @@ export class ClickOutside {
       exceptSelector?: string;
       activate?: boolean;
       passiveEventListeners?: boolean;
+      eventTypes?: EventType[];
     } = {}
   ) {
-    let { activate, ...opts } = options;
+    let { activate, eventTypes, ...opts } = options;
 
     this._isActive = activate ?? this._isActive;
+    this.eventTypes = eventTypes ?? [UP_LISTENER_NAME];
+
     Object.assign(this, opts);
 
     this.upEventHandler = this.createHandler(
@@ -35,6 +40,7 @@ export class ClickOutside {
   }
 
   private _isActive = true;
+  private eventTypes: EventType[];
   private passiveEventListeners = true;
   private pointerDownEventPath?: EventTarget[];
   private upEventHandler: EventListener;
@@ -63,14 +69,19 @@ export class ClickOutside {
       ...PASSIVE_EVENT_OPTIONS,
     });
 
-    document.addEventListener(UP_LISTENER_NAME, this.upEventHandler, {
-      ...(this.passiveEventListeners && PASSIVE_EVENT_OPTIONS),
-    });
+    for (let eventType of this.eventTypes) {
+      document.addEventListener(eventType, this.upEventHandler, {
+        ...(this.passiveEventListeners && PASSIVE_EVENT_OPTIONS),
+      });
+    }
   }
 
   private removeListeners() {
     document.removeEventListener(DOWN_LISTENER_NAME, this.downEventHandler);
-    document.removeEventListener(UP_LISTENER_NAME, this.upEventHandler);
+
+    for (let eventType of this.eventTypes) {
+      document.removeEventListener(eventType, this.upEventHandler);
+    }
   }
 
   private createHandler(

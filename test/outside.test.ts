@@ -145,6 +145,37 @@ describe('Outside', () => {
     });
   });
 
+  describe('Multiple event types', () => {
+    it('replaces the default event type', () => {
+      render(defaultTemplate);
+
+      outside = new ClickOutside(q('.inside'), callback, {
+        eventTypes: ['mousedown', 'click'],
+      });
+
+      triggerEvent('.outside', 'pointerup'); // This shouldn't be called
+      triggerEvent('.outside', 'mousedown');
+      triggerEvent('.outside', 'click');
+
+      expect(callback).toBeCalledTimes(2);
+    });
+
+    it('torn down on destoy', () => {
+      render(defaultTemplate);
+
+      outside = new ClickOutside(q('.inside'), callback, {
+        eventTypes: ['touchend', 'click'],
+      });
+
+      outside.destroy();
+
+      triggerEvent('.outside', 'touchend');
+      triggerEvent('.outside', 'click');
+
+      expect(callback).toBeCalledTimes(0);
+    });
+  });
+
   describe('options', () => {
     it('exceptSelector', async () => {
       render(hyper`
