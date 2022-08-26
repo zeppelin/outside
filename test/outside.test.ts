@@ -44,6 +44,17 @@ describe('Outside', () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
+  it('destroy called multiple times', async () => {
+    render(defaultTemplate);
+
+    outside = new ClickOutside(q('.inside'), callback);
+
+    expect(() => {
+      outside.destroy();
+      outside.destroy();
+    }).not.toThrow();
+  });
+
   it('options.exceptSelector', async () => {
     render(hyper`
       <div class="outside">🏞</div>
