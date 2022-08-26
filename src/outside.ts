@@ -34,10 +34,10 @@ export class ClickOutside {
   }
 
   private _isActive = true;
-  private pointerDownEvent?: Event;
+  private pointerDownEventPath?: EventTarget[];
   private upEventHandler: EventListener;
   private downEventHandler = (e: Event) => {
-    this.pointerDownEvent = e;
+    this.pointerDownEventPath = composedPath(e);
   };
 
   get isActive() {
@@ -81,14 +81,10 @@ export class ClickOutside {
         return;
       }
 
-      if (this.pointerDownEvent) {
-        let downEventPath = composedPath(this.pointerDownEvent);
-
-        // If the pointer was pressed inside the element, just return, because it
-        // doesn't matter if it was released outside.
-        if (downEventPath?.includes(element)) {
-          return;
-        }
+      // If the pointer was pressed inside the element, just return, because it
+      // doesn't matter if it was released outside.
+      if (this.pointerDownEventPath?.includes(element)) {
+        return;
       }
 
       let releasedElement = pointerUpEvent.target as HTMLElement;

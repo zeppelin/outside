@@ -92,6 +92,17 @@ describe('Outside', () => {
 
       expect(callback).toHaveBeenCalledTimes(1);
     });
+
+    it('release outside', async () => {
+      render(defaultTemplate);
+
+      outside = new ClickOutside(q('.inside'), callback);
+
+      triggerEvent('.inside', 'pointerdown');
+      triggerEvent('.outside', 'pointerup');
+
+      expect(callback).toBeCalledTimes(0);
+    });
   });
 
   describe('options', () => {
