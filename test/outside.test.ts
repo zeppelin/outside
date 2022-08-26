@@ -62,11 +62,11 @@ describe('Outside', () => {
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('options.active', async () => {
+  it('options.activate', async () => {
     render(defaultTemplate);
 
     outside = new ClickOutside(q('.inside'), callback, {
-      active: false,
+      activate: false,
     });
 
     expect(outside.isActive).toBe(false);

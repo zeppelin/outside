@@ -9,10 +9,13 @@ export class ClickOutside {
     action: Function,
     options: {
       exceptSelector?: string;
-      active?: boolean;
+      activate?: boolean;
     } = {}
   ) {
-    Object.assign(this, options);
+    let { activate, ...opts } = options;
+
+    this._isActive = activate ?? this._isActive;
+    Object.assign(this, opts);
 
     this.upEventHandler = this.createHandler(
       element,
@@ -23,7 +26,7 @@ export class ClickOutside {
     this.addListeners();
   }
 
-  private active = true;
+  private _isActive = true;
   private pointerDownEvent?: Event;
   private upEventHandler: EventListener;
   private downEventHandler = (e: Event) => {
@@ -31,15 +34,15 @@ export class ClickOutside {
   };
 
   get isActive() {
-    return this.active;
+    return this._isActive;
   }
 
   activate() {
-    this.active = true;
+    this._isActive = true;
   }
 
   deactivate() {
-    this.active = false;
+    this._isActive = false;
   }
 
   destroy() {
@@ -62,7 +65,7 @@ export class ClickOutside {
     exceptSelector?: string
   ) {
     return (pointerUpEvent: Event) => {
-      if (!this.active) {
+      if (!this._isActive) {
         return;
       }
 
