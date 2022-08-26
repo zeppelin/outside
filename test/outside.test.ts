@@ -58,30 +58,70 @@ describe('Outside', () => {
   });
 
   describe('Event listeners', async () => {
-    // TODO: can't seem to test this in jsdom, because:
+    // TODO: can't seem to test this in jsdom (false positive), because:
     //
     // document.addEventListener('click', (e) => {
     //   e.preventDefault();
     //   console.log(e.defaultPrevented); // `false` in jsdom, `true` in real browsers
     // };
-    it('event listeners are passive', async () => {
-      render(defaultTemplate);
+    it('event listeners are passive by default', () =>
+      new Promise((done) => {
+        render(defaultTemplate);
 
-      let o = {
-        callback(e: Event) {
-          e.preventDefault();
-          expect(e.defaultPrevented).toBe(false);
-        },
-      };
+        let o = {
+          callback(e: Event) {
+            e.preventDefault();
+            expect(e.defaultPrevented).toBe(false);
 
-      let callback = vi.spyOn(o, 'callback');
+            done(true);
+          },
+        };
 
-      outside = new ClickOutside(q('.inside'), callback as unknown as Function);
+        let callback = vi.spyOn(o, 'callback');
 
-      clickWithPointer('.outside');
+        outside = new ClickOutside(
+          q('.inside'),
+          callback as unknown as Function
+        );
 
-      expect(callback).toHaveBeenCalledTimes(1);
-    });
+        clickWithPointer('.outside');
+
+        expect(callback).toHaveBeenCalledTimes(1);
+      }));
+
+    // TODO: can't seem to test this in jsdom (test fails), because:
+    //
+    // document.addEventListener('click', (e) => {
+    //   e.preventDefault();
+    //   console.log(e.defaultPrevented); // `false` in jsdom, `true` in real browsers
+    // };
+    it.skip('passive can be configured', () =>
+      new Promise((done) => {
+        render(defaultTemplate);
+
+        let o = {
+          callback(e: Event) {
+            e.preventDefault();
+            expect(e.defaultPrevented).toBe(true);
+
+            done(true);
+          },
+        };
+
+        let callback = vi.spyOn(o, 'callback');
+
+        outside = new ClickOutside(
+          q('.inside'),
+          callback as unknown as Function,
+          {
+            passiveEventListeners: false,
+          }
+        );
+
+        clickWithPointer('.outside');
+
+        expect(callback).toHaveBeenCalledTimes(1);
+      }));
 
     it('without pointerdown event', async () => {
       render(defaultTemplate);

@@ -17,6 +17,7 @@ export class ClickOutside {
     options: {
       exceptSelector?: string;
       activate?: boolean;
+      passiveEventListeners?: boolean;
     } = {}
   ) {
     let { activate, ...opts } = options;
@@ -34,6 +35,7 @@ export class ClickOutside {
   }
 
   private _isActive = true;
+  private passiveEventListeners = true;
   private pointerDownEventPath?: EventTarget[];
   private upEventHandler: EventListener;
   private downEventHandler = (e: Event) => {
@@ -62,7 +64,7 @@ export class ClickOutside {
     });
 
     document.addEventListener(UP_LISTENER_NAME, this.upEventHandler, {
-      ...PASSIVE_EVENT_OPTIONS,
+      ...(this.passiveEventListeners && PASSIVE_EVENT_OPTIONS),
     });
   }
 
