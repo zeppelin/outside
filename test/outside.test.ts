@@ -57,6 +57,33 @@ describe('Outside', () => {
     });
   });
 
+  describe('Event listeners', async () => {
+    // TODO: can't seem to test this in jsdom, because:
+    //
+    // document.addEventListener('click', (e) => {
+    //   e.preventDefault();
+    //   console.log(e.defaultPrevented); // `false` in jsdom, `true` in real browsers
+    // };
+    it('event listeners are passive', async () => {
+      render(defaultTemplate);
+
+      let o = {
+        callback(e: Event) {
+          e.preventDefault();
+          expect(e.defaultPrevented).toBe(false);
+        },
+      };
+
+      let callback = vi.spyOn(o, 'callback');
+
+      outside = new ClickOutside(q('.inside'), callback as unknown as Function);
+
+      clickWithPointer('.outside');
+
+      expect(callback).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('options', () => {
     it('exceptSelector', async () => {
       render(hyper`

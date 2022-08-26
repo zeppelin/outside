@@ -1,7 +1,14 @@
 import { closest, composedPath, documentOrBodyContains } from './utils';
+import arePassiveEventsSupported from './utils/supports-passive-events';
 
 // Somehow this needs to be told to ESLint.
 /* global EventListener */
+
+const PASSIVE_EVENTS_SUPPORTED = arePassiveEventsSupported();
+const PASSIVE_EVENT_OPTIONS = PASSIVE_EVENTS_SUPPORTED ? { passive: true } : {};
+
+const DOWN_LISTENER_NAME = 'pointerdown';
+const UP_LISTENER_NAME = 'pointerup';
 
 export class ClickOutside {
   constructor(
@@ -50,13 +57,18 @@ export class ClickOutside {
   }
 
   private addListeners() {
-    document.addEventListener('pointerdown', this.downEventHandler);
-    document.addEventListener('pointerup', this.upEventHandler);
+    document.addEventListener(DOWN_LISTENER_NAME, this.downEventHandler, {
+      ...PASSIVE_EVENT_OPTIONS,
+    });
+
+    document.addEventListener(UP_LISTENER_NAME, this.upEventHandler, {
+      ...PASSIVE_EVENT_OPTIONS,
+    });
   }
 
   private removeListeners() {
-    document.removeEventListener('pointerdown', this.downEventHandler);
-    document.removeEventListener('pointerup', this.upEventHandler);
+    document.removeEventListener(DOWN_LISTENER_NAME, this.downEventHandler);
+    document.removeEventListener(UP_LISTENER_NAME, this.upEventHandler);
   }
 
   private createHandler(
