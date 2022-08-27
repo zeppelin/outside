@@ -26,9 +26,14 @@ export class Outside {
       passiveEventListeners?: boolean;
       eventTypes?: EventType[];
       capture?: boolean;
+      refEvent?: boolean;
     } = {}
   ) {
-    let { activate, eventTypes, ...opts } = options;
+    let { activate, eventTypes, refEvent, ...opts } = options;
+
+    if (refEvent) {
+      this.refEvent = new Event('__reference');
+    }
 
     this._isActive = activate ?? this._isActive;
     this.eventTypes = eventTypes ?? [UP_LISTENER_NAME];
@@ -48,6 +53,7 @@ export class Outside {
   private capture = false;
   private eventTypes: EventType[];
   private passiveEventListeners = true;
+  private refEvent?: Event;
   private pointerDownEventPath?: EventTarget[];
   private upEventHandler: EventListener;
   private downEventHandler = (e: Event) => {
@@ -104,6 +110,12 @@ export class Outside {
   ) {
     return (pointerUpEvent: Event) => {
       if (!this._isActive) {
+        return;
+      }
+
+      // Return if the reference event is created before or at the time the the
+      // pointer up event was fired.
+      if (this.refEvent && this.refEvent.timeStamp > pointerUpEvent.timeStamp) {
         return;
       }
 

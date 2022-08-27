@@ -21,6 +21,7 @@
       }
 
       let outside = new ClickOutside(document.querySelector('.inside'), callback, {
+        refEvent: true,
         exceptSelector: '.except-outside'
       });
     </script>

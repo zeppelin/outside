@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import hyper from 'hyperhtml';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, test, vi } from 'vitest';
 
 import { Outside } from '../src/index';
 import { clickWithPointer, q, render, triggerEvent } from './test-helpers';
@@ -242,5 +242,20 @@ describe('Outside', () => {
 
         triggerEvent('.outside', 'pointerup');
       }));
+
+    test('refEvent', () => {
+      render(defaultTemplate);
+
+      let event = new Event('pointerup', { bubbles: true });
+
+      outside = new ClickOutside(q('.inside'), callback, {
+        capture: true,
+        refEvent: true,
+      });
+
+      triggerEvent('.outside', event);
+
+      expect(callback).toHaveBeenCalledTimes(0);
+    });
   });
 });
