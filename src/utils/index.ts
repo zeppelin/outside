@@ -1,4 +1,5 @@
 import { matches } from './matches-selector';
+export { arePassiveEventsSupported } from './supports-passive-events';
 
 type EventWithPath = Event & {
   // IE doesn't have `composedPath()`

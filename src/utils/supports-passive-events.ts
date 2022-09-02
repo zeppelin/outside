@@ -5,9 +5,7 @@
 
 let supportsPassiveEvents: boolean;
 
-export default function arePassiveEventsSupported(
-  win: Window = window
-): boolean {
+export function arePassiveEventsSupported(win: Window = window): boolean {
   if (supportsPassiveEvents !== undefined) {
     return supportsPassiveEvents;
   }

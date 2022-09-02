@@ -1,5 +1,9 @@
-import { closest, composedPath, documentOrBodyContains } from './utils';
-import arePassiveEventsSupported from './utils/supports-passive-events';
+import {
+  arePassiveEventsSupported,
+  closest,
+  composedPath,
+  documentOrBodyContains,
+} from './utils';
 
 // Somehow this needs to be told to ESLint.
 /* global EventListener, DocumentEventMap */
