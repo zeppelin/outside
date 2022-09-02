@@ -8,7 +8,6 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'outside',
-      fileName: (format) => `outside.${format}.js`,
     },
   },
   test: {

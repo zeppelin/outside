@@ -16,8 +16,8 @@
   "module": "./dist/outside.es.js",
   "exports": {
     ".": {
-      "import": "./dist/outside.es.js",
-      "require": "./dist/outside.umd.js"
+      "import": "./dist/outside.js",
+      "require": "./dist/outside.umd.cjs"
     }
   },
   "files": [
