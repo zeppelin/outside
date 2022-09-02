@@ -5,9 +5,14 @@
 
 let supportsPassiveEvents: boolean;
 
-export function arePassiveEventsSupported(win: Window = window): boolean {
+export function arePassiveEventsSupported(): boolean {
   if (supportsPassiveEvents !== undefined) {
     return supportsPassiveEvents;
+  }
+
+  if (typeof window === 'undefined') {
+    supportsPassiveEvents = false;
+    return false;
   }
 
   let passive = false;
@@ -22,8 +27,8 @@ export function arePassiveEventsSupported(win: Window = window): boolean {
 
   const noop = () => {};
 
-  win.addEventListener('t', noop, options);
-  win.removeEventListener('t', noop, options as EventListenerOptions);
+  window.addEventListener('t', noop, options);
+  window.removeEventListener('t', noop, options as EventListenerOptions);
 
   supportsPassiveEvents = passive;
 
