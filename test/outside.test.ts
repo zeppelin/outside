@@ -2,7 +2,7 @@
 import hyper from 'hyperhtml';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { ClickOutside } from '../src/index';
+import { Outside } from '../src/index';
 import { clickWithPointer, q, render, triggerEvent } from './test-helpers';
 
 const defaultTemplate = hyper`
@@ -11,7 +11,7 @@ const defaultTemplate = hyper`
 `;
 
 describe('Outside', () => {
-  let outside: ClickOutside;
+  let outside: Outside;
   let callback: any = vi.fn();
 
   afterEach(() => {
@@ -22,7 +22,7 @@ describe('Outside', () => {
   it('smoke test', async () => {
     render(defaultTemplate);
 
-    outside = new ClickOutside(q('.inside'), callback);
+    outside = new Outside(q('.inside'), callback);
 
     clickWithPointer('.inside');
     clickWithPointer('.outside');
@@ -34,7 +34,7 @@ describe('Outside', () => {
     it('destroy', async () => {
       render(defaultTemplate);
 
-      outside = new ClickOutside(q('.inside'), callback);
+      outside = new Outside(q('.inside'), callback);
 
       clickWithPointer('.outside');
 
@@ -48,7 +48,7 @@ describe('Outside', () => {
     it('destroy called multiple times', async () => {
       render(defaultTemplate);
 
-      outside = new ClickOutside(q('.inside'), callback);
+      outside = new Outside(q('.inside'), callback);
 
       expect(() => {
         outside.destroy();
@@ -79,10 +79,7 @@ describe('Outside', () => {
 
         let callback = vi.spyOn(o, 'callback');
 
-        outside = new ClickOutside(
-          q('.inside'),
-          callback as unknown as Function
-        );
+        outside = new Outside(q('.inside'), callback as unknown as Function);
 
         clickWithPointer('.outside');
 
@@ -110,13 +107,9 @@ describe('Outside', () => {
 
         let callback = vi.spyOn(o, 'callback');
 
-        outside = new ClickOutside(
-          q('.inside'),
-          callback as unknown as Function,
-          {
-            passiveEventListeners: false,
-          }
-        );
+        outside = new Outside(q('.inside'), callback as unknown as Function, {
+          passiveEventListeners: false,
+        });
 
         clickWithPointer('.outside');
 
@@ -126,7 +119,7 @@ describe('Outside', () => {
     it('without pointerdown event', async () => {
       render(defaultTemplate);
 
-      outside = new ClickOutside(q('.inside'), callback);
+      outside = new Outside(q('.inside'), callback);
 
       triggerEvent('.outside', 'pointerup');
 
@@ -136,7 +129,7 @@ describe('Outside', () => {
     it('release outside', async () => {
       render(defaultTemplate);
 
-      outside = new ClickOutside(q('.inside'), callback);
+      outside = new Outside(q('.inside'), callback);
 
       triggerEvent('.inside', 'pointerdown');
       triggerEvent('.outside', 'pointerup');
@@ -149,7 +142,7 @@ describe('Outside', () => {
     it('replaces the default event type', () => {
       render(defaultTemplate);
 
-      outside = new ClickOutside(q('.inside'), callback, {
+      outside = new Outside(q('.inside'), callback, {
         eventTypes: ['mousedown', 'click'],
       });
 
@@ -163,7 +156,7 @@ describe('Outside', () => {
     it('torn down on destoy', () => {
       render(defaultTemplate);
 
-      outside = new ClickOutside(q('.inside'), callback, {
+      outside = new Outside(q('.inside'), callback, {
         eventTypes: ['touchend', 'click'],
       });
 
@@ -184,7 +177,7 @@ describe('Outside', () => {
         <div class="except-outside">❌</div>
       `);
 
-      outside = new ClickOutside(q('.inside'), callback, {
+      outside = new Outside(q('.inside'), callback, {
         exceptSelector: '.except-outside',
       });
 
@@ -198,7 +191,7 @@ describe('Outside', () => {
     it('activate', async () => {
       render(defaultTemplate);
 
-      outside = new ClickOutside(q('.inside'), callback, {
+      outside = new Outside(q('.inside'), callback, {
         activate: false,
       });
 
@@ -229,7 +222,7 @@ describe('Outside', () => {
           done(true);
         };
 
-        outside = new ClickOutside(q('.inside'), callback);
+        outside = new Outside(q('.inside'), callback);
 
         triggerEvent('.outside', 'pointerup');
       }));
@@ -243,7 +236,7 @@ describe('Outside', () => {
           done(true);
         };
 
-        outside = new ClickOutside(q('.inside'), callback, {
+        outside = new Outside(q('.inside'), callback, {
           capture: true,
         });
 

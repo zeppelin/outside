@@ -12,7 +12,7 @@ const PASSIVE_EVENT_OPTIONS = PASSIVE_EVENTS_SUPPORTED ? { passive: true } : {};
 const DOWN_LISTENER_NAME = 'pointerdown';
 const UP_LISTENER_NAME = 'pointerup';
 
-export class ClickOutside {
+export class Outside {
   constructor(
     element: Element,
     action: Function,

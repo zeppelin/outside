@@ -1,2 +1,1 @@
-export { ClickOutside } from './outside';
-export { ClickOutsideCompat } from './compat';
+export { Outside } from './outside';
