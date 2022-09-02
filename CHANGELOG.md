@@ -1,3 +1,5 @@
+## v0.0.1-alpha.8 (2022-09-02)
+
 ## v0.0.1-alpha.7 (2022-09-02)
 
 * Change build output names & exports entry (27baa3e)
